@@ -204,7 +204,7 @@ namespace WebApplication1.Controllers
         public ActionResult ListTicket(int account_id)
         {
             var ma = db.Customers.Where(x => x.AccountId == account_id).FirstOrDefault().CustomerId;
-            ViewBag.ListTicket = db.Orders.Where(x => x.CustomerId == account_id).ToList() ?? null;
+            ViewBag.ListTicket = db.Orders.Where(x => x.CustomerId == ma).ToList() ?? null;
             ViewBag.Customer = db.Customers.Where(x => x.AccountId == account_id).FirstOrDefault() ?? null;
             ViewBag.Balance = db.Accounts.Where(x => x.AccountId == account_id).FirstOrDefault().Balance ?? 0;
             return View();
