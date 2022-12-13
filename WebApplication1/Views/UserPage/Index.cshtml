@@ -1,0 +1,273 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/UserLayout/_Main.cshtml";
+}
+
+<div class="hero_area">
+    <!-- slider section -->
+    <section class=" slider_section ">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-7 ">
+                    <div class="box">
+                        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators" style="display: none">
+                                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                            </ol>
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+
+                                    <div class="img-box">
+                                        <img src="https://media3.giphy.com/media/H5BfYd0N7kRBJyFZD2/giphy.gif?cid=6c09b952cc3e735500246d5a74d349ea14949b8d3ce6e93e&rid=giphy.gif&ct=s" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-5 ">
+                    <div class="slider_form">
+                        <h4>
+                            Đăng ký tài khoản mua vé
+                        </h4>
+                        <form action="">
+                            <input type="text" placeholder="Email" id="Email">
+                            <input type="text" placeholder="Họ và tên" id="CustomerName">
+                            <input type="date" placeholder="Ngày sinh" id="DOB">
+                            <input type="text" placeholder="CCCD" id="PassPortCode">
+                            <input type="text" placeholder="Địa chỉ" id="Address">
+                            <input type="text" placeholder="Tên đăng nhập" id="UserName">
+                            <input type="password" placeholder="Mật khẩu" id="Password">
+                            <div class="btm_input">
+                                <input type="text" placeholder="Số điện thoại" id="Phone">
+                                <button onclick="register()">Đăng kí ngay</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <!-- end slider section -->
+</div>
+
+
+<section class="about_section layout_padding">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-4 col-md-5 offset-lg-2 offset-md-1">
+                <div class="detail-box">
+                    <h2>
+                        Giới thiệu <br>
+                        Dịch vụ đặt vé
+                    </h2>
+                    <p>
+                        Với 13 năm kinh nghiệm trong lĩnh vực tổ chức và phân phối các tour du lịch giá rẻ, chất lượng đi cùng trải nghiệm thú vị nhất, Vietnam Booking đã mang đến cho hàng triệu du khách những chuyến “vi vu” đáng giá nhất. Với việc nắm bắt xu hướng du lịch nhanh chóng, Vietnam Booking luôn tiên phong mang đến các hành trình hấp dẫn, điểm đến mới mẻ cho cộng đồng những người yêu “xê dịch”.
+                        Bên cạnh đó, công ty du lịch Vietnam Booking còn là đại lý của hơn 200 hãng hàng không nội địa và quốc tế, cũng như có một mạng lưới đối tác khách sạn rộng lớn và cung cấp visa đến hơn 100 quốc gia. Vì thế, dù là tour du lịch trong nước hay ngoài nước, Vietnam Booking cũng sẽ mang đến cho du khách những dịch vụ chất lượng hàng đầu với mức giá rẻ nhất. Tất cả những gì du khách cần làm là ba bước: Chọn tour, đặt tour và thanh toán, còn lại mọi việc đã có Vietnam Booking lo. Du khách chỉ cần sắp xếp hành lý, đợi đến ngày “vi vu” tận hưởng chuyến đi của mình!
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="">
+                    <img src="https://azgo.com.vn/wp-content/uploads/2022/03/banner-du-lich-nicotex.jpg" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- end about section -->
+<!-- service section -->
+
+<section class="service_section layout_padding">
+    <div class="container">
+        <div class="heading_container">
+            <h2>
+                Dịch vụ của chúng tôi
+            </h2>
+        </div>
+        <div class="service_container">
+            <div class="box">
+                <div class="img-box">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Bus_stop_symbol.svg/1112px-Bus_stop_symbol.svg.png" alt="">
+                </div>
+                <div class="detail-box">
+                    <h5>
+                        Tìm kiếm địa điểm
+                    </h5>
+                    <a href="/UserPage/Location">
+                        Xem thêm
+                    </a>
+                </div>
+            </div>
+            <div class="box">
+                <div class="img-box">
+                    <img src="https://png.pngtree.com/png-clipart/20190520/original/pngtree-bus-icon-design-png-image_4262463.jpg" alt="">
+                </div>
+                <div class="detail-box">
+                    <h5>
+                        Xem danh sách tour
+                    </h5>
+                    <a href="/UserPage/Tour">
+                        Xem thêm
+                    </a>
+                </div>
+            </div>
+            <div class="box">
+                <div class="img-box">
+                    <img src="../Content/assets/urotaxi-html/images/backpack.png" alt="">
+                </div>
+                <div class="detail-box">
+                    <h5>
+                        Đặt vé
+                    </h5>
+                    <a href="/UserPage/BookingTicket">
+                        Đặt vé ngay
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- end service section -->
+<!-- news section -->
+
+<section class="news_section layout_padding">
+    <div class="container">
+        <div class="heading_container">
+            <h2>
+                Tin tức <br>
+                Mới
+            </h2>
+        </div>
+        <div class="news_container">
+            <div class="box">
+                <div class="date-box">
+                    <h6>
+                        Hôm nay
+                    </h6>
+                </div>
+                <div class="img-box">
+                    <img src="http://divui.com/blog/wp-content/uploads/2018/10/111111.jpg" alt="" width="300" height="200">
+                </div>
+                <div class="detail-box">
+                    <h6>
+                        Tin tức hôm nay
+                    </h6>
+                    <p>
+                       Sở Du lịch TP.Đà Nẵng, Cảng hàng không quốc tế Đà Nẵng, Công ty AHT và Vietjet Air chào đón tại ga đến quốc tế - sân bay quốc tế Đà Nẵng.
+                    </p>
+                </div>
+            </div>
+            <div class="box">
+                <div class="date-box">
+                    <h6>
+                        Hôm nay
+                    </h6>
+                </div>
+                <div class="img-box">
+                    <img src="http://t1.gstatic.com/licensed-image?q=tbn:ANd9GcTdbqdzu8Nz0ut67ZgQfIhsKZSeYoGkFYOpHmjhIWLQq9Wjs_w8RFDQhzE9g6gWYWbO" alt="" width="300" height="200">
+                </div>
+                <div class="detail-box">
+                    <h6>
+                        Tin tức hôm nay
+                    </h6>
+                    <p>
+                        Du Thuyền có hồ bơi riêng, nhiều hoạt động trải nghiệm, chèo Karak, miễn phí ăn 3 bữa. Bảng Giá Du Thuyền Thăm Vịnh Hạ Long 5 Sao.
+                    </p>
+                </div>
+            </div>
+            <div class="box">
+                <div class="date-box">
+                    <h6>
+                        Hôm nay
+                    </h6>
+                </div>
+                <div class="img-box">
+                    <img src="https://image.thanhnien.vn/w1024/Uploaded/2022/qfsiy/2021_12_02/ec9abf01cac8019658d9-5425.jpeg" alt="" width="300" height="200">
+                </div>
+                <div class="detail-box">
+                    <h6>
+                        Tin tức hôm nay
+                    </h6>
+                    <p>
+                        Mở rộng làn để chống ùn tắc là bất khả thi nên chỉ còn cách tăng công suất sử dụng của đường sá bằng phương tiện công cộng.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- end news section -->
+
+<!-- info section -->
+
+<section class="info_section layout_padding-top layout_padding2-bottom">
+    <div class="container">
+        <div class="box">
+            <div class="info_form">
+                <h4>
+                    Subscribe Our Newsletter
+                </h4>
+                <form action="">
+                    <input type="text" placeholder="Enter your email">
+                    <div class="d-flex justify-content-end">
+                        <button>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="info_links">
+                <ul>
+                    <li class=" ">
+                        <a class="" href="index.html">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="">
+                        <a class="" href="about.html"> About</a>
+                    </li>
+                    <li class="">
+                        <a class="" href="service.html"> Services </a>
+                    </li>
+                    <li class="">
+                        <a class="" href="news.html"> News</a>
+                    </li>
+                    <li class="">
+                        <a class="" href="contact.html">Contact Us</a>
+                    </li>
+                    <li class="">
+                        <a class="" href="#">Login</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="info_social">
+                <div>
+                    <a href="">
+                        <img src="../Content/assets/urotaxi-html/images/fb.png" alt="">
+                    </a>
+                </div>
+                <div>
+                    <a href="">
+                        <img src="../Content/assets/urotaxi-html/images/twitter.png" alt="">
+                    </a>
+                </div>
+                <div>
+                    <a href="">
+                        <img src="../Content/assets/urotaxi-html/images/linkedin.png" alt="">
+                    </a>
+                </div>
+                <div>
+                    <a href="">
+                        <img src="../Content/assets/urotaxi-html/images/instagram.png" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!-- end info section -->

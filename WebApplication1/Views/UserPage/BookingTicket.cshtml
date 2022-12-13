@@ -1,0 +1,154 @@
+﻿
+@{
+    ViewBag.Title = "BookingTicket";
+    Layout = "~/Views/Shared/UserLayout/_Main.cshtml";
+}
+
+<!-- contact section -->
+
+<section class="contact_section layout_padding">
+    <div class="container">
+        <div class="heading_container">
+            <h2>
+                Đặt vé trực tuyến<br>
+                ----@ViewBag.Tour.TourName----
+            </h2>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-5  offset-md-1">
+                <div class="contact_form">
+                    <h4>
+                        Tham khảo vé
+                    </h4>
+                    <form>
+                        <select class="form-control form-control-lg" style="width: 100%" id="select_ticket">
+                            <option selected>Chọn loại vé</option>
+                            @foreach (var m in @ViewBag.ListTicket)
+                            {
+                                if (m.TicketType == 1)
+                                {
+                                    <option value="@m.TicketId">Vé trẻ em - @m.Price</option>
+
+                                }
+                                else if (m.TicketType == 2)
+                                {
+                                    <option value="@m.TicketId">Vé người lớn - @m.Price</option>
+
+                                }
+                                else if (m.TicketType != 1 && m.TicketType != 2)
+                                {
+                                    <option value="@m.TicketId">Vé tour - @m.Price</option>
+                                }
+
+                            }
+                        </select>
+                        <div class="row" style="margin-top: 20px">
+                            <div class="form-group col-md-6">
+                                <label style="color: white" for="exampleInputEmail1">Số lượng người lớn</label>
+                                <input type="email" class="form-control" id="ticket_growup" aria-describedby="emailHelp">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label style="color: white" for="exampleInputEmail1">Số lượng trẻ em</label>
+                                <input type="email" class="form-control" id="ticket_child" aria-describedby="emailHelp">
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 row">
+                            <a class="btn btn-warning" href="javascript:void(0)" type="button" onclick="buyTicket()">Xác nhận đặt</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6 px-0">
+                <div class="img-box">
+                    <img src="@ViewBag.Tour.Poster" alt="" style="width:100%;height:500px;">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- end contact section -->
+
+<script>
+    var ngayphathanh = new Date();
+    var ngayhethan = new Date();
+
+    $(document).ready(function () {
+        $('#Price').val('0')
+    });
+
+    checkVeThang = () => {
+        if ($('#veThang').is(":checked")) {
+            $('#Giatien').val('30000');
+            ngayhethan = new Date();
+        }
+        else {
+            $('#Giatien').val('7000');
+            ngayhethan = ngayphathanh.setDate(ngayphathanh.getDate() + 30);;
+        }
+    }
+
+    async function postData(url = '', data = {}) {
+        // Default options are marked with *
+        const response = await fetch(url, {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, *same-origin, omit
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            body: JSON.stringify(data) // body data type must match "Content-Type" header
+        });
+        return response.json(); // parses JSON response into native JavaScript objects
+    }
+
+    buyTicket = () => {
+        if (JSON.parse(localStorage.getItem('UserInfo'))) {
+            var priceGrowup = $('#ticket_growup').val() ?? 0;
+            var priceChild = $('#ticket_child').val() ?? 0;
+
+            var soduTK = 0;
+            var req = {
+                TourId: @ViewBag.Tour.TourId,
+                Status: 1,
+                AccountId: JSON.parse(localStorage.getItem('UserInfo')).AccountId,
+                TicketGrowup: priceGrowup,
+                TicketChild: priceChild
+            }
+
+            $.ajax({
+                url: '/Account/FindById?id=' + JSON.parse(localStorage.getItem('UserInfo')).AccountId,
+                type: 'GET',
+                success: function (result) {
+                    if (result.success) {
+                        soduTK = result.data.Balance;
+                        postData('/UserPage/BuyTicket', req)
+                            .then((data) => {
+                                if (data.success) {
+                                    toastr.success('Successfully !');
+                                }
+                                else {
+                                    toastr.warning('Failed !');
+                                    toastr.warning('Số dư trong tài khoản không đủ. Bạn cần nạp thêm tiền !');
+                                }
+                            });
+                    }
+                    else {
+                        toastr.warning('Failed !');
+                        $('.modal').modal('hide');
+                    }
+                }
+            });
+        }
+        else {
+            toastr.warning('Bạn cần đăng nhập để thực hiện thao tác này !');
+        }
+    }
+</script>
+

@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewBag.Title = "ListHotel";
+    Layout = "~/Views/Shared/UserLayout/_Main.cshtml";
+}
+
+<div class="content">
+    <div class="container">
+        <div class="heading_container">
+            <h2>
+                Danh sách khách sạn
+            </h2>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <input id="myInput" type="text" placeholder="Tìm kiếm nhanh..">
+    </div>
+    <div class="">
+        <div class="col-md-12">
+            <div class="table-responsive table-hover table-sales">
+                <table id="table_tuyenxe" class="table">
+                    <thead>
+                        <tr>
+                            <th>Mã</th>
+                            <th>Tên khách sạn</th>
+                            <th>Loại phòng</th>
+                            <th>Số tiền/ Người</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myTable">
+                        @foreach (var m in @ViewBag.ListHotel)
+                        {
+                            <tr>
+                                <td>@m.HotelId</td>
+                                <td>@m.HotelName</td>
+                                <td>@m.TypeRoom Người</td>
+                                <td>@m.PricePerOne</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>

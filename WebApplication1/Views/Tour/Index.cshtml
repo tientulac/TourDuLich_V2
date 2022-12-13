@@ -1,0 +1,552 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/AdminLayout/_Main.cshtml";
+}
+
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+
+
+<div class="content">
+    <div class="panel-header bg-primary-gradient">
+        <div class="page-inner py-5">
+            <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
+                <div>
+                    <h2 class="text-white pb-2 fw-bold">Tour Du lịch</h2>
+                    <h5 class="text-white op-7 mb-2">Trang chủ/Admin/Tour</h5>
+                </div>
+                <div class="ml-md-auto py-2 py-md-0">
+                    <a href="#" class="btn btn-secondary btn-round" data-toggle="modal" data-target="#addModal" onclick="openAddModal()">Thêm mới</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-inner mt--5">
+        <div class="row mt--2">
+            <div class="col-md-12">
+                <div class="card full-height">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive table-hover table-sales">
+                                    <table id="dt_table" class="display">
+                                        <thead>
+                                            <tr>
+                                                <th>Mã</th>
+                                                <th>Tên tour</th>
+                                                <th>Ngày bắt đầu</th>
+                                                <th>Ngày kết thúc</th>
+                                                <th>Thời gian</th>
+                                                <th>Điểm xuất phát</th>
+                                                <th>Điểm đến</th>
+                                                <th>Giá tiền</th>
+                                                <th>Hình ảnh</th>
+                                                <th>Phương tiện di chuyển</th>
+                                                <th>Thao tác</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var m in @ViewBag.ListTour)
+                                            {
+                                                <tr>
+                                                    <td>@m.TourId</td>
+                                                    <td>@m.TourName</td>
+                                                    <td>@m.StartDate</td>
+                                                    <td>@m.EndDate</td>
+                                                    <td>@m.TourTime</td>
+                                                    <td>@m.LocationFrom</td>
+                                                    <td>@m.LocationTo</td>
+                                                    <td>@m.Price</td>
+                                                    <td><img src="@m.Poster" style="width: 50px; height: 50px" alt="Alternate Text" /></td>
+                                                    <td>@m.VehicleName</td>
+                                                    <td>
+                                                        <button class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#addModal" style="margin-right: 5px;" onclick="openUpdateModal(@m.TourId)">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-outline-danger btn-sm" onclick="openDeleteModal(@m.TourId)" style="margin-right: 5px;" data-toggle="modal" data-target="#deleteModal">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>
+                                                        <button class="btn btn-outline-warning btn-sm" onclick="openImageModal(@m.TourId)" style="margin-right: 5px;" data-toggle="modal" data-target="#imageModal">
+                                                            <i class="fas fa-image"></i>
+                                                        </button>
+                                                        <button class="btn btn-outline-success btn-sm" onclick="openScheduelModal(@m.TourId)" style="margin-right: 5px;" data-toggle="modal" data-target="#scheduleModal">
+                                                            <i class="fas fa-car-side"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">Thêm mới</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <form id="bouqueti-form">
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label class="required" for="inputEmail4">Tên</label>
+                                <input type="text" class="form-control contact-method" id="TourName" placeholder="Nhập tên">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="required" for="inputEmail4">Ngày bắt đầu</label>
+                                <input type="date" class="form-control contact-method" id="StartDate">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="required" for="inputEmail4">Ngày kết thúc</label>
+                                <input type="date" class="form-control contact-method" id="EndDate">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="required" for="inputEmail4">Thời gian</label>
+                                <input type="text" class="form-control contact-method" id="TourTime">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="required" for="inputEmail4">Điểm bắt đầu</label>
+                                <input type="text" class="form-control contact-method" id="LocationFrom">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="required" for="inputEmail4">Điểm kết thúc</label>
+                                <input type="text" class="form-control contact-method" id="LocationTo">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="required" for="inputEmail4">Giá tiền</label>
+                                <input type="number" class="form-control contact-method" id="Price">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="required" for="inputEmail4">Hình ảnh</label>
+                                <input type="text" class="form-control contact-method" id="Poster">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label for="Descrip">Mô tả</label>
+                                <textarea class="form-control" id="Descrip" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control" id="VehicleId">
+                                    <option value="" selected>Chọn phương tiện</option>
+                                    @foreach (var m in @ViewBag.ListVehicle)
+                                    {
+                                        <option value="@m.VehicleId" selected>@m.VahicleName - @m.VehicleCode</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                <button type="button" class="btn btn-primary" onclick="submit()">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 style="text-align:center">Bạn chắc chắn muốn xóa bản ghi này ?</h2>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                <button type="button" class="btn btn-primary" onclick="deleteItem()">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="topicModalLabel">Thêm hình ảnh cho tour</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-inline">
+                    <div class="form-group col-md-9">
+                        <label class="required" for="inputEmail4">Hình ảnh (PasteLink)</label>
+                        <input type="text" class="form-control contact-method" id="TourImage">
+                    </div>
+                    <input type="button" class="btn-sm btn-primary mb-2" onclick="addImage()" value="Thêm">
+                </form>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Hình ảnh</th>
+                            <th scope="col">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tour_image">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="topicModalLabel">Thêm lịch trình cho tour</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-inline" style="float: right">
+                    <input  type="button" class="btn-sm btn-primary mb-2" onclick="addSchedule()" value="Thêm">
+                </form>
+                <div class="col-md-12 row">
+                    <div class="form-group col-md-4">
+                        <label class="required" for="inputEmail4">Hình ảnh (PasteLink)</label>
+                        <input type="text" class="form-control contact-method" id="ScheduleImage">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="required" for="inputEmail4">Tên lịch trình</label>
+                        <input type="text" class="form-control contact-method" id="TourScheduleName">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="required" for="inputEmail4">Thứ tự ngày</label>
+                        <input type="text" class="form-control contact-method" id="NumDay">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1">Mô tả</label>
+                    <textarea class="form-control" id="DescripSchedule" rows="5"></textarea>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Ngày thứ</th>
+                            <th scope="col">Hình ảnh</th>
+                            <th scope="col">Tên lịch trình</th>
+                            <th scope="col">Mô tả</th>
+                            <th scope="col">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tour_schedule">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var id_record = 0;
+    var dataUpdate = {};
+
+    openAddModal = () => {
+        id_record = 0;
+        $('#TourName').val('');
+        $('#StartDate').val('');
+        $('#EndDate').val('');
+        $('#TourTime').val('');
+        $('#LocationFrom').val('');
+        $('#LocationTo').val('');
+        $('#Price').val('');
+        $('#Poster').val('');
+        $('#Descrip').val('');
+        $('#VehicleId').val('');
+    };
+
+    // Example POST method implementation:
+    async function postData(url = '', data = {}) {
+        // Default options are marked with *
+        const response = await fetch(url, {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, *same-origin, omit
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            body: JSON.stringify(data) // body data type must match "Content-Type" header
+        });
+        return response.json(); // parses JSON response into native JavaScript objects
+    }
+
+    $(document).ready(function () {
+        $('#dt_table').DataTable();
+    });
+
+    submit = () => {
+        var req = {
+            TourId: id_record,
+            TourName: $('#TourName').val(),
+            StartDate: $('#StartDate').val(),
+            EndDate: $('#EndDate').val(),
+            TourTime: $('#TourTime').val(),
+            LocationFrom: $('#LocationFrom').val(),
+            LocationTo: $('#LocationTo').val(),
+            Price: $('#Price').val(),
+            Poster: $('#Poster').val(),
+            Descrip: $('#Descrip').val(),
+            VehicleId: $('#VehicleId').val(),
+        }
+
+        postData('/Tour/Save', req)
+            .then((data) => {
+                if (data.success) {
+                    toastr.success('Successfully !');
+                    $('.modal').modal('hide');
+                    window.location.reload();
+                }
+                else {
+                    toastr.warning('Failed !');
+                    $('.modal').modal('hide');
+                }
+            });
+    }
+
+    openDeleteModal = (id) => {
+        id_record = id;
+    }
+
+    formatDate = (y, m, d) => {
+        if (m < 10) {
+            m = '0' + m;
+        }
+        if (d < 10) {
+            d = '0' + d
+        }
+        return `${y}-${m}-${d}`.toString()
+    }
+
+    openUpdateModal = (id) => {
+        id_record = id;
+        $.ajax({
+            url: '/Tour/FindById?id=' + id,
+            type: 'GET',
+            success: function (result) {
+                if (result.success) {
+                    var nph = new Date(parseInt(result.data.StartDate.toString().replaceAll('/', '').replaceAll('Date(', '').replaceAll(')', '')));
+                    var nhh = new Date(parseInt(result.data.EndDate.toString().replaceAll('/', '').replaceAll('Date(', '').replaceAll(')', '')));
+                    console.log(nph);
+                    console.log(nhh);
+                    $('#TourName').val(result.data.TourName);
+                    $('#StartDate').val(formatDate(nph.getFullYear(), nph.getMonth() + 1, nph.getDate()).toString());
+                    $('#EndDate').val(formatDate(nhh.getFullYear(), nhh.getMonth() + 1, nhh.getDate()).toString());
+                    $('#TourTime').val(result.data.TourTime);
+                    $('#LocationFrom').val(result.data.LocationFrom);
+                    $('#LocationTo').val(result.data.LocationTo);
+                    $('#Price').val(result.data.Price);
+                    $('#Poster').val(result.data.Poster);
+                    $('#Descrip').val(result.data.Descrip);
+                    $('#VehicleId').val(result.data.VehicleId);
+                }
+                else {
+                    toastr.warning('Failed !');
+                    $('.modal').modal('hide');
+                }
+            }
+        });
+    }
+
+    deleteItem = () => {
+        $.ajax({
+            url: '/Tour/Delete?id=' + id_record,
+            type: 'GET',
+            success: function (result) {
+                if (result.success) {
+                    toastr.success('Successfully !');
+                    $('.modal').modal('hide');
+                    window.location.reload();
+                }
+                else {
+                    toastr.warning('Failed !');
+                    $('.modal').modal('hide');
+                }
+            }
+        });
+    }
+
+    openImageModal = (id) => {
+        id_record = id;
+        $.ajax({
+            url: '/Tour/GetListImage?id=' + id_record,
+            type: 'GET',
+            success: function (result) {
+                if (result.success) {
+                    console.log(result.data);
+                    var temp = '';
+                    for (var item of result.data) {
+                        console.log(temp);
+                        temp += `<tr>
+                                <td>${item.TourImageId}</td>
+                                <td><img src="${item.Image}" style="width: 50px; height: 50px" alt="Alternate Text" /></td>
+                                <td>
+                                    <button class="btn btn-outline-danger btn-sm" onclick="deleteImage(${item.TourImageId})">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>`
+                    }
+                    $('#tour_image').html(temp);
+                }
+                else {
+                    toastr.warning('Failed !');
+                    $('.modal').modal('hide');
+                }
+            }
+        });
+    }
+
+    openScheduelModal = (id) => {
+        id_record = id;
+        $.ajax({
+            url: '/Tour/GetListSchedule?id=' + id_record,
+            type: 'GET',
+            success: function (result) {
+                if (result.success) {
+                    console.log(result.data);
+                    var temp = '';
+                    for (var item of result.data) {
+                        console.log(temp);
+                        temp += `<tr>
+                                <td>${item.NumDay}</td>
+                                <td><img src="${item.Image}" style="width: 50px; height: 50px" alt="Alternate Text" /></td>
+                                <td>${item.TourScheduleName}</td>
+                                <td>${item.Descrip}</td>
+                                <td>
+                                    <button class="btn btn-outline-danger btn-sm" onclick="deleteSchedule(${item.TourScheduleId})">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>`
+                    }
+                    $('#tour_schedule').html(temp);
+                }
+                else {
+                    toastr.warning('Failed !');
+                    $('.modal').modal('hide');
+                }
+            }
+        });
+    }
+
+    addSchedule = () => {
+        var req = {
+            TourId: id_record,
+            Image: $('#ScheduleImage').val(),
+            TourScheduleName: $('#TourScheduleName').val(),
+            NumDay: $('#NumDay').val(),
+            Descrip: $('#DescripSchedule').val(),
+        }
+        postData('/TourSchedule/Save', req)
+            .then((data) => {
+                if (data.success) {
+                    toastr.success('Successfully !');
+                    $('.modal').modal('hide');
+                    window.location.reload();
+                }
+                else {
+                    toastr.warning('Failed !');
+                    $('.modal').modal('hide');
+                }
+            });
+    }
+
+    addImage = () => {
+        var req = {
+            TourId: id_record,
+            Image: $('#TourImage').val()
+        }
+        postData('/TourImage/Save', req)
+            .then((data) => {
+                if (data.success) {
+                    toastr.success('Successfully !');
+                    $('.modal').modal('hide');
+                    window.location.reload();
+                }
+                else {
+                    toastr.warning('Failed !');
+                    $('.modal').modal('hide');
+                }
+            });
+    }
+
+    deleteImage = (TourImageId) => {
+        $.ajax({
+            url: '/TourImage/Delete?id=' + TourImageId,
+            type: 'GET',
+            success: function (result) {
+                if (result.success) {
+                    toastr.success('Successfully !');
+                    $('.modal').modal('hide');
+                    window.location.reload();
+                }
+                else {
+                    toastr.warning('Failed !');
+                    $('.modal').modal('hide');
+                }
+            }
+        });
+    }
+
+    deleteSchedule = (id) => {
+        $.ajax({
+            url: '/TourSchedule/Delete?id=' + id,
+            type: 'GET',
+            success: function (result) {
+                if (result.success) {
+                    toastr.success('Successfully !');
+                    $('.modal').modal('hide');
+                    window.location.reload();
+                }
+                else {
+                    toastr.warning('Failed !');
+                    $('.modal').modal('hide');
+                }
+            }
+        });
+    }
+</script>
+
+
+
+

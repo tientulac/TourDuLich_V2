@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewBag.Title = "ListLocation";
+    Layout = "~/Views/Shared/UserLayout/_Main.cshtml";
+}
+
+<style>
+    iframe {
+        width: 100% !important;
+        margin-top: 20px;
+    }
+</style>
+
+<!-- contact section -->
+<section class="contact_section layout_padding-bottom">
+    <div class="container">
+        <div class="heading_container">
+            <h2>
+                Địa điểm
+            </h2>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8  offset-md-1">
+                <div class="contact_form">
+                    <h4>
+                        Tìm kếm địa điểm trên bản đồ
+                    </h4>
+                    <form>
+                        <select class="form-control form-control-lg" style="width: 100%" id="select_tram">
+                            <option selected>Chọn địa điểm</option>
+                            @foreach (var m in @ViewBag.ListLocation)
+                            {
+                                <option value="@m.LocationId">@m.LocationCode - @m.LocationName - @m.Locate</option>
+
+                            }
+                        </select>
+                    </form>
+                    <button class="btn btn-warning" style="margin-top: 10px;" onclick="search()">Tìm kiếm</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div id="manhung"></div>
+        </div>
+    </div>
+</section>
+<!-- end contact section -->
+
+<script>
+    search = () => {
+        var id = $('#select_tram').val();
+        $.ajax({
+            url: '../UserPage/Location?id=' + id,
+            type: 'GET',
+            success: function (result) {
+                if (result.success) {
+                    $('#manhung').html(result.data.Iframe);
+                }
+                else {
+                    toastr.warning('Failed !');
+                    $('.modal').modal('hide');
+                }
+            }
+        });
+    }
+</script>

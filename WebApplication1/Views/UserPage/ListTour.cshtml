@@ -1,0 +1,114 @@
+﻿
+@{
+    ViewBag.Title = "ListTour";
+    Layout = "~/Views/Shared/UserLayout/_Main.cshtml";
+}
+
+<section class="news_section layout_padding">
+    <div class="container">
+        <div class="heading_container">
+            <h2>
+                Danh sách <br>
+                Tour du lịch
+            </h2>
+        </div>
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <button onclick="filterTour()" class="btn btn-primary btn-sm" style="float:right">Tìm kiếm</button>
+                </div>
+                <div class="col-md-4">
+                    <label style="font-weight: bold">Tên tour</label>
+                    <input class="form-control" type="text" id="TourName" value="" placeholder="Tên tour" />
+                </div>
+                <div class="col-md-2">
+                    <label style="font-weight: bold">Giá lớn hơn</label>
+                    <input class="form-control" type="number" id="StartPrice" value="0" />
+                </div>
+                <div class="col-md-2">
+                    <label style="font-weight: bold">Giá nhỏ hơn</label>
+                    <input class="form-control" type="number" id="EndPrice" value="0" />
+                </div>
+                <div class="col-md-4">
+                    <label style="font-weight: bold">Giá</label>
+
+                    <select class="form-control" id="PriceOrder">
+                        <option value="" selected>Chọn mức giá</option>
+                        <option value="ADSC">Tăng dần</option>
+                        <option value="DESC">Giảm dần</option>
+                    </select>
+                </div>
+                <div style="margin-top: 10px;" class="col-md-4">
+                    <label style="font-weight: bold">Điểm đi</label>
+                    <input class="form-control" type="text" id="LocationFrom" value="" placeholder="Điểm đi" />
+                </div>
+                <div style="margin-top: 10px;" class="col-md-4">
+                    <label style="font-weight: bold">Điểm đến</label>
+                    <input class="form-control" type="text" id="LocationTo" value="" placeholder="Điểm đến" />
+                </div>
+                <div style="margin-top: 10px;" class="col-md-4">
+                    <label style="font-weight: bold">Ngày bắt đầu</label>
+                    <input class="form-control" type="date" id="StartDate" value="" />
+                </div>
+            </div>
+        </div>
+        <div class="news_container col-md-12">
+            <div class="row">
+                @foreach (var m in @ViewBag.ListTour)
+                {
+                    <a href="/UserPage/TourDetail?tourId=@m.TourId" class="box" style="margin-top: 15px; color: black;">
+                        <div class="date-box">
+                            <h6>
+                                @m.TourTime
+                            </h6>
+                        </div>
+                        <div class="img-box">
+                            <img src="@m.Poster" alt="" width="300" height="200">
+                        </div>
+                        <div class="detail-box">
+                            <h6>
+                                @m.TourName
+                            </h6>
+                            <p>
+                                <b>Thời gian:</b> @m.StartDate - @m.EndDate
+                            </p>
+                            <p>
+                                <b>Lịch trình:</b>: @m.LocationFrom - @m.LocationTo
+                            </p>
+                            <p>
+                                <b>Giá:</b>: @m.Price
+                            </p>
+                            <p>
+                                <b>Phương tiện di chuyển:</b> @m.VehicleName
+                            </p>
+                            <br>
+                            <p>
+                                @m.Descrip
+                            </p>
+                            <p>
+                                Có nhân viên phục vụ đồ ăn, đồ uống trong suốt chuyến bay.
+                            </p>
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    filterTour = () => {
+        var tourName = $('#TourName').val() ?? '';
+        var startDate = $('#StartDate').val() ?? null;
+        var endDate = $('#EndDate').val() ?? null;
+        var priceOrder = $('#PriceOrder').val();
+        var locationFrom = $('#LocationFrom').val();
+        var locationTo = $('#LocationTo').val();
+        var startPrice = $('#StartPrice').val();
+        var endPrice = $('#EndPrice').val();
+        //var _vehicleName = $('VehicleName').val();
+        window.location.href = `
+../UserPage/ListTour?tourName=${tourName}&startDate=${startDate}&endDate=${endDate}&priceOrder=${priceOrder}&locationFrom=${locationFrom}&locationTo=${locationTo}&startPrice=${startPrice}&endPrice=${endPrice}`;
+    }
+</script>
