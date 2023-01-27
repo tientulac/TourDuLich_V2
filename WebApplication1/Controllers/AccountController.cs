@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using WebApplication1.Config;
 using WebApplication1.Models;
 using WebApplication1.Models.DTO;
 
@@ -13,6 +14,8 @@ namespace WebApplication1.Controllers
     public class AccountController : Controller
     {
         private LinqDataContext db = new LinqDataContext();
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        private static Random random = new Random();
 
         [HttpPost]
         public ActionResult Save(Account req)
@@ -110,5 +113,49 @@ namespace WebApplication1.Controllers
 
         //    return tokenString;
         //}
+
+
+        [HttpPost]
+        public ActionResult FindPassword(Account req)
+        {
+            var acc = db.Accounts?.Where(x => x.UserName == req.UserName && x.Email == req.Email)?.FirstOrDefault() ?? null;
+            if (acc != null)
+            {
+                var passwordRand = new string(Enumerable.Repeat(chars, 5).Select(s => s[random.Next(s.Length)]).ToArray());
+                var result = STMP_Config.SendEmail(acc.Email, "TÌM LẠI MẬT KHẨU CHO TÀI KHOẢN : " + req.UserName, "Mật khẩu của bạn đã được đặt lại thành: " + passwordRand, "Tienhdtl123", "tiennnth2002007@fpt.edu.vn");
+                if (result)
+                {
+                    acc.Password = passwordRand;
+                    db.SubmitChanges();
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                }
+                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult UpdateInfo(AccountDTO req)
+        {
+            try
+            {
+                var acc = db.Accounts.Where(x => x.AccountId == req.AccountId).FirstOrDefault();
+                var cus = db.Customers.Where(x => x.AccountId == acc.AccountId).FirstOrDefault();
+                cus.CustomerName = req.CustomerName;
+                cus.DOB = req.DOB;
+                cus.PassPortCode = req.PassPortCode;
+                cus.Address = req.Address;
+                acc.Email = req.Email;
+                db.SubmitChanges();
+                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

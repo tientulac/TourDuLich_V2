@@ -75,7 +75,7 @@ namespace WebApplication1.Models
     #endregion
 		
 		public LinqDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["TicketTourConnectionString1"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["TicketTourConnectionString"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}

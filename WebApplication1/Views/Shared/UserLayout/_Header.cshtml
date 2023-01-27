@@ -26,8 +26,14 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/UserPage/ListHotel"> Khách sạn</a>
                         </li>
+                        <li class="nav-item row" id="login">
+                            <a class="nav-link" href="/UserPage/ListHotel"> Đặt tour cá nhân</a>
+                        </li>
                         <li class="nav-item" id="notLogin">
                             <a class="nav-link" href="javascript:void(0)" data-toggle="modal" data-target="#loginModal">Đăng nhập</a>
+                        </li>
+                        <li class="nav-item" id="notLogin">
+                            <a class="nav-link" href="javascript:void(0)" data-toggle="modal" data-target="#findPasswordModal">Tìm mật khẩu</a>
                         </li>
                         <li class="nav-item row" id="login">
                             <a class="nav-link" href="javascript:void(0)" onclick="seeHoadon()"><i class="fa fa-user"></i></a>
@@ -41,7 +47,6 @@
     </div>
 </header>
 <!-- end header section -->
-
 <!-- Modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -71,6 +76,39 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
                 <button type="button" class="btn btn-primary" onclick="login()">Đăng nhập</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="findPasswordModal" tabindex="-1" role="dialog" aria-labelledby="findPasswordLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="findPasswordLabel">Tìm mật khẩu</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <form id="bouqueti-form">
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label class="required" for="inputEmail4">Tên đăng nhập</label>
+                                <input type="text" class="form-control contact-method" id="username_find" placeholder="Nhập tên đăng nhập">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="required" for="inputEmail4">Email</label>
+                                <input type="text" class="form-control contact-method" id="email_find" placeholder="Nhập email">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                <button type="button" class="btn btn-primary" onclick="findPassword()">Xác nhận</button>
             </div>
         </div>
     </div>
@@ -174,6 +212,22 @@
                 }
                 else {
                     toastr.warning('Wrong password or username !');
+                }
+            });
+    }
+
+    findPassword = () => {
+        var req = {
+            UserName: $('#username_find').val(),
+            Email: $('#email_find').val(),
+        }
+        postData('../Account/FindPassword', req)
+            .then((data) => {
+                if (data.success) {
+                    toastr.success('Mật khẩu ngẫu nhiên đã được gửi vào mail đăng kí của bạn. Vui lòng check trong hòm thư !');
+                }
+                else {
+                    toastr.warning('Email hoặc tên tài khoảng không hợp lệ !');
                 }
             });
     }

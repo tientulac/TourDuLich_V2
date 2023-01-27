@@ -97,7 +97,7 @@
                                 <h6 class="mb-0">Tên</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                @ViewBag.Customer.CustomerName
+                                <input type="text" id="name" value="@ViewBag.Customer.CustomerName" class="form-control" />
                             </div>
                         </div>
                         <hr>
@@ -108,8 +108,10 @@
                             <div class="col-sm-9 text-secondary">
                                 @{
                                     DateTime x = @ViewBag.Customer.DOB;
-                                    <p>@x.ToString().Substring(0, 10)</p>
+                                    var month = x.Month > 10 ? x.Month.ToString() : $"0{x.Month}";
+                                    var day = x.Day > 10 ? x.Day.ToString() : $"0{x.Day}";
                                 }
+                                <input type="date" id="dob" value="@x.Year-@month-@day" />
                             </div>
                         </div>
                         <hr>
@@ -118,7 +120,7 @@
                                 <h6 class="mb-0">CCCD</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                @ViewBag.Customer.PassPortCode
+                                <input type="text" id="passport" value="@ViewBag.Customer.PassPortCode" class="form-control" />
                             </div>
                         </div>
                         <hr>
@@ -127,7 +129,16 @@
                                 <h6 class="mb-0">Địa chỉ</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                @ViewBag.Customer.Address
+                                <input type="text" id="address" value="@ViewBag.Customer.Address" class="form-control" />
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Email</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <input type="text" id="email" value="@ViewBag.Account.Email" class="form-control" />
                             </div>
                         </div>
                         <hr>
@@ -138,8 +149,9 @@
                             <div class="col-sm-3 text-secondary">
                                 @ViewBag.Balance
                             </div>
-                            <div class="col-sm-3 text-secondary">
+                            <div class="row col-sm-6 text-secondary">
                                 <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addModal" onclick="addMoney(@ViewBag.Customer.AccountId)">Nạp thêm tiền</button>
+                                <button style="margin-left: 10px;" class="btn btn-sm btn-success" onclick="updateInfo(@ViewBag.Customer.AccountId)">Cập nhật thông tin</button>
                             </div>
                         </div>
                     </div>
@@ -315,5 +327,25 @@
                 }
             }
         });
+    }
+
+    updateInfo = (id) => {
+        var req = {
+            AccountId: id,
+            CustomerName: $('#name').val(),
+            PassportCode: $('#passport').val(),
+            Address: $('#address').val(),
+            Email: $('#email').val(),
+            DOB: $('#dob').val()
+        }
+        postData('/Account/UpdateInfo', req)
+            .then((data) => {
+                if (data.success) {
+                    toastr.success('Successfully !');
+                }
+                else {
+                    toastr.warning('Failed !');
+                }
+            });
     }
 </script>
