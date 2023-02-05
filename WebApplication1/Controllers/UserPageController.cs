@@ -128,6 +128,7 @@ namespace WebApplication1.Controllers
             return View();
 
         }
+
         public ActionResult TourDetail(int tourId = 0)
         {
             var _tour = (from a in db.Tours.Where(x => x.TourId == tourId)
@@ -244,7 +245,7 @@ namespace WebApplication1.Controllers
                     var acc_id = db.Customers.Where(x => x.CustomerId == customerId).FirstOrDefault().AccountId;
                     var tk = db.Accounts.Where(x => x.AccountId == acc_id).FirstOrDefault();
                     tk.Balance = tk.Balance > 0 ? tk.Balance : 0;
-                    tk.Balance += _order.TotalPrice * (float)(70/100);
+                    tk.Balance += _order.TotalPrice * (float)(70 / 100);
                     _order.Status = 2;
                     _order.DeletedAt = DateTime.Now;
                     db.SubmitChanges();
@@ -256,7 +257,7 @@ namespace WebApplication1.Controllers
                     var acc_id = db.Customers.Where(x => x.CustomerId == customerId).FirstOrDefault().AccountId;
                     var tk = db.Accounts.Where(x => x.AccountId == acc_id).FirstOrDefault();
                     tk.Balance = tk.Balance > 0 ? tk.Balance : 0;
-                    tk.Balance += _order.TotalPrice/2;
+                    tk.Balance += _order.TotalPrice / 2;
                     _order.Status = 2;
                     _order.DeletedAt = DateTime.Now;
                     db.SubmitChanges();
@@ -270,6 +271,65 @@ namespace WebApplication1.Controllers
             catch (Exception ex)
             {
                 return Json(new { success = false, message = "Lỗi hệ thống" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult PrivateTour()
+        {
+            var listPrivateTour = (from a in db.TourPrivates
+                                   select new TourPrivateDTO
+                                   {
+                                       TourPrivateId = a.TourPrivateId,
+                                       LocationFromId = a.LocationFromId,
+                                       LocationToId = a.LocationToId,
+                                       Slot = a.Slot,
+                                       Type = a.Type,
+                                       StartDate = a.StartDate,
+                                       ToDate = a.ToDate,
+                                       HotelId = a.HotelId,
+                                       VehicleId = a.VehicleId,
+                                       Price = a.Status == 2 ? a.Price : 0,
+                                       LocationFrom = db.Locations.Where(x => x.LocationId == a.LocationFromId).FirstOrDefault().LocationName ?? "",
+                                       LocationTo = db.Locations.Where(x => x.LocationId == a.LocationToId).FirstOrDefault().LocationName ?? "",
+                                       HotelName = db.Hotels.Where(x => x.HotelId == a.HotelId).FirstOrDefault().HotelName ?? "",
+                                       VehicleName = db.Vehicles.Where(x => x.VehicleId == a.VehicleId).FirstOrDefault().VahicleName ?? "",
+                                       StatusName = a.Status == 1 ? "Đang chờ duyệt" : a.Status == 2 ? "Duyệt thành công" : "Từ chối duyệt" ,
+                                       Status = a.Status
+                                   }).ToList();
+            ViewBag.ListTourPrivates = listPrivateTour;
+            ViewBag.ListLocation = db.Locations.ToList();
+            ViewBag.ListHotel = db.Hotels.ToList();
+            ViewBag.ListVehicle = db.Vehicles.ToList();
+            return View();
+        }
+
+        public ActionResult BookingPrivateTour(TourPrivate req)
+        {
+            try
+            {
+                req.Status = 1;
+                db.TourPrivates.InsertOnSubmit(req);
+                db.SubmitChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false });
+            }
+        }
+
+        public ActionResult DeletePrivateTour(int id)
+        {
+            try
+            {
+                var _t = db.TourPrivates.Where(M => M.TourPrivateId == id).FirstOrDefault();
+                db.TourPrivates.DeleteOnSubmit(_t);
+                db.SubmitChanges();
+                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
             }
         }
     }

@@ -1,0 +1,26 @@
+USE [TicketTour]
+GO
+/****** Object:  Table [dbo].[TourPrivate]    Script Date: 2/5/2023 10:07:08 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TourPrivate](
+	[TourPrivateId] [int] IDENTITY(1,1) NOT NULL,
+	[LocationFromId] [int] NULL,
+	[LocationToId] [int] NULL,
+	[Slot] [int] NULL,
+	[Type] [int] NULL,
+	[StartDate] [datetime] NULL,
+	[ToDate] [datetime] NULL,
+	[HotelId] [int] NULL,
+	[VehicleId] [int] NULL,
+	[Status] [int] NULL,
+	[Price] [float] NULL,
+	[AccountId] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[TourPrivateId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO

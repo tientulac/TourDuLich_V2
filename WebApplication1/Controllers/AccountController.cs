@@ -122,7 +122,7 @@ namespace WebApplication1.Controllers
             if (acc != null)
             {
                 var passwordRand = new string(Enumerable.Repeat(chars, 5).Select(s => s[random.Next(s.Length)]).ToArray());
-                var result = STMP_Config.SendEmail(acc.Email, "TÌM LẠI MẬT KHẨU CHO TÀI KHOẢN : " + req.UserName, "Mật khẩu của bạn đã được đặt lại thành: " + passwordRand, "Tienhdtl123", "tiennnth2002007@fpt.edu.vn");
+                var result = STMP_Config.SendEmail(acc.Email, "TÌM LẠI MẬT KHẨU CHO TÀI KHOẢN : " + req.UserName, "Mật khẩu của bạn đã được đặt lại thành: " + passwordRand, "123123123z", "tiennnth2002007@fpt.edu.vn");
                 if (result)
                 {
                     acc.Password = passwordRand;

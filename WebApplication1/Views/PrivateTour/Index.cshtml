@@ -4,7 +4,6 @@
     Layout = "~/Views/Shared/AdminLayout/_Main.cshtml";
 }
 
-
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
 
@@ -14,11 +13,8 @@
         <div class="page-inner py-5">
             <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
                 <div>
-                    <h2 class="text-white pb-2 fw-bold">Loại tour</h2>
-                    <h5 class="text-white op-7 mb-2">Trang chủ/Admin/Loại tour</h5>
-                </div>
-                <div class="ml-md-auto py-2 py-md-0">
-                    <a href="#" class="btn btn-secondary btn-round" data-toggle="modal" data-target="#addModal" onclick="openAddModal()">Thêm mới</a>
+                    <h2 class="text-white pb-2 fw-bold">Tour cá nhân</h2>
+                    <h5 class="text-white op-7 mb-2">Trang chủ/Admin/Tour cá nhân </h5>
                 </div>
             </div>
         </div>
@@ -34,23 +30,48 @@
                                     <table id="dt_table" class="display">
                                         <thead>
                                             <tr>
-                                                <th>Mã loại</th>
-                                                <th>Tên loại</th>
-                                                <th>Hành động</th>
+                                                <th>Mã</th>
+                                                <th>Địa điểm bắt đầu</th>
+                                                <th>Địa điểm kết thúc</th>
+                                                <th>Số người</th>
+                                                <th>Ngày bắt đầu</th>
+                                                <th>Ngày kết thúc</th>
+                                                <th>Khách sạn</th>
+                                                <th>Phương tiện di chuyển</th>
+                                                <th>Trạng thái</th>
+                                                <th>Tổng tiền</th>
+                                                <th>Thao tác</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach (var m in @ViewBag.ListCategory)
+                                            @foreach (var m in @ViewBag.ListTourPrivates)
                                             {
                                                 <tr>
-                                                    <td>@m.CategoryCode</td>
-                                                    <td>@m.CategoryName</td>
-                                                    <td>
-                                                        <button class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#addModal" style="margin-right: 5px;" onclick="openUpdateModal(@m.CategoryId)">
+                                                    <td>@m.TourPrivateId</td>
+                                                    <td>@m.LocationFrom</td>
+                                                    <td>@m.LocationTo</td>
+                                                    <td>@m.Slot</td>
+                                                    <td>@m.StartDate</td>
+                                                    <td>@m.ToDate</td>
+                                                    <td>@m.HotelName</td>
+                                                    <td>@m.VehicleName</td>
+                                                    @if (m.Status == 2)
+                                                    {
+                                                        <td style="font-weight: bold; color: forestgreen">@m.StatusName</td>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="font-weight: bold; color: red">@m.StatusName</td>
+
+                                                    }
+                                                    <td>@m.Price VNĐ</td>
+                                                    <td style="white-space: nowrap">
+                                                        <button class="btn btn-outline-success btn-sm" onclick="openUpdateModal(@m.TourPrivateId, @m.Price)" style="margin-right: 5px;" data-toggle="modal" data-target="#addModal">
                                                             <i class="fas fa-edit"></i>
                                                         </button>
-                                                        <button class="btn btn-outline-danger btn-sm" onclick="openDeleteModal(@m.CategoryId)" style="margin-right: 5px;" data-toggle="modal" data-target="#deleteModal">
-                                                            <i class="fas fa-trash-alt"></i>
+                                                        <button class="btn btn-outline-danger btn-sm" onclick="denyTour(@m.TourPrivateId)" style="margin-right: 5px;">
+                                                            X
                                                         </button>
                                                     </td>
                                                 </tr>
@@ -73,7 +94,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addModalLabel">Thêm mới</h5>
+                <h5 class="modal-title" id="addModalLabel">Duyệt tour cá nhân</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -83,12 +104,8 @@
                     <form id="bouqueti-form">
                         <div class="form-row">
                             <div class="form-group col-md-12">
-                                <label class="required" for="inputEmail4">Mã loại</label>
-                                <input type="text" class="form-control contact-method" id="CategoryCode" placeholder="Nhập mã">
-                            </div>
-                            <div class="form-group col-md-12">
-                                <label class="required" for="inputEmail4">Tên loại</label>
-                                <input type="text" class="form-control contact-method" id="CategoryName" placeholder="Nhập tên">
+                                <label class="required" for="inputEmail4">Số tiền</label>
+                                <input type="text" class="form-control contact-method" id="Price" placeholder="Nhập số tiền (VNĐ)">
                             </div>
                         </div>
                     </form>
@@ -96,7 +113,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
-                <button type="button" class="btn btn-primary" onclick="submit()">Lưu thay đổi</button>
+                <button type="button" class="btn btn-primary" onclick="submit()">Lưu</button>
             </div>
         </div>
     </div>
@@ -125,12 +142,10 @@
 
 <script>
     var id_record = 0;
-    var dataUpdate = {};
 
-    openAddModal = () => {
-        id_record = 0;
-        $('#CategoryCode').val('');
-        $('#CategoryName').val('');
+    openUpdateModal = (id, price) => {
+        id_record = id;
+        $('#Price').val(price);
     };
 
     // Example POST method implementation:
@@ -156,14 +171,16 @@
         $('#dt_table').DataTable();
     });
 
+
+
     submit = () => {
         var req = {
-            CategoryId: id_record,
-            CategoryCode: $('#CategoryCode').val(),
-            CategoryName: $('#CategoryName').val(),
+            TourPrivateId: id_record,
+            Status: 2,
+            Price: $('#Price').val()
         }
 
-        postData('/Category/Save', req)
+        postData('/PrivateTour/UpdateStatus', req)
             .then((data) => {
                 if (data.success) {
                     toastr.success('Successfully !');
@@ -177,34 +194,14 @@
             });
     }
 
-    openDeleteModal = (id) => {
-        id_record = id;
-    }
-
-    openUpdateModal = (id) => {
-        id_record = id;
-        $.ajax({
-            url: '/Category/FindById?id=' + id,
-            type: 'GET',
-            success: function (result) {
-                if (result.success) {
-                    $('#CategoryCode').val(result.data.CategoryCode);
-                    $('#CategoryName').val(result.data.CategoryName);
-                }
-                else {
-                    toastr.warning('Failed !');
-                    $('.modal').modal('hide');
-                }
-            }
-        });
-    }
-
-    deleteItem = () => {
-        $.ajax({
-            url: '/Category/Delete?id=' + id_record,
-            type: 'GET',
-            success: function (result) {
-                if (result.success) {
+    denyTour = (id) => {
+        var req = {
+            TourPrivateId: id,
+            Status: 3
+        }
+        postData('/PrivateTour/UpdateStatus', req)
+            .then((data) => {
+                if (data.success) {
                     toastr.success('Successfully !');
                     $('.modal').modal('hide');
                     window.location.reload();
@@ -213,11 +210,13 @@
                     toastr.warning('Failed !');
                     $('.modal').modal('hide');
                 }
-            }
-        });
+            });
     }
 
 </script>
+
+
+
 
 
 

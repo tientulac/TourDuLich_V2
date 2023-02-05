@@ -161,6 +161,7 @@
     <Compile Include="Controllers\HotelController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Controllers\PrivateTourController.cs" />
     <Compile Include="Controllers\StaffController.cs" />
     <Compile Include="Controllers\TicketController.cs" />
     <Compile Include="Controllers\TourController.cs" />
@@ -178,6 +179,7 @@
     <Compile Include="Models\DTO\StaffDTO.cs" />
     <Compile Include="Models\DTO\TicketDTO.cs" />
     <Compile Include="Models\DTO\TourDTO.cs" />
+    <Compile Include="Models\DTO\TourPrivateDTO.cs" />
     <Compile Include="Models\DTO\VoteTourDTO.cs" />
     <Compile Include="Models\Linq.designer.cs">
       <AutoGen>True</AutoGen>
@@ -715,6 +717,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="SQLScript\Script0502.txt" />
     <Content Include="SQLScript\ScriptSQL.sql" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -757,6 +760,8 @@
     <Content Include="Views\UserPage\TourDetail.cshtml" />
     <Content Include="Views\UserPage\ListTicket.cshtml" />
     <Content Include="Views\Shared\UserLayout\_Chatbot.cshtml" />
+    <Content Include="Views\UserPage\PrivateTour.cshtml" />
+    <Content Include="Views\PrivateTour\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

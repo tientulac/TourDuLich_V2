@@ -1,0 +1,280 @@
+﻿
+@{
+    ViewBag.Title = "PrivateTour";
+    Layout = "~/Views/Shared/UserLayout/_Main.cshtml";
+}
+
+<div class="content">
+    <div class="container">
+        <div class="heading_container">
+            <h2>
+                Đặt tour cá nhân
+            </h2>
+        </div>
+    </div>
+    <div class="panel-header bg-primary-gradient">
+        <div class="page-inner py-5">
+            <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
+                <div class="ml-md-auto py-2 py-md-0">
+                    <a style="margin-right: 20px;" href="#" class="btn btn-secondary btn-round" data-toggle="modal" data-target="#addModal" onclick="openAddModal()">Đặt tour cá nhân</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <input id="myInput" type="text" placeholder="Tìm kiếm nhanh..">
+    </div>
+    <div class="">
+        <div class="col-md-12">
+            <div class="table-responsive table-hover table-sales">
+                <table id="table_tuyenxe" class="table">
+                    <thead>
+                        <tr>
+                            <th>Mã</th>
+                            <th>Địa điểm bắt đầu</th>
+                            <th>Địa điểm kết thúc</th>
+                            <th>Số người</th>
+                            <th>Ngày bắt đầu</th>
+                            <th>Ngày kết thúc</th>
+                            <th>Khách sạn</th>
+                            <th>Phương tiện di chuyển</th>
+                            <th>Trạng thái</th>
+                            <th>Tổng tiền</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myTable">
+                        @foreach (var m in @ViewBag.ListTourPrivates)
+                        {
+                            <tr>
+                                <td>@m.TourPrivateId</td>
+                                <td>@m.LocationFrom</td>
+                                <td>@m.LocationTo</td>
+                                <td>@m.Slot</td>
+                                <td>@m.StartDate</td>
+                                <td>@m.ToDate</td>
+                                <td>@m.HotelName</td>
+                                <td>@m.VehicleName</td>
+                                @if (m.Status == 2)
+                                {
+                                    <td style="font-weight: bold; color: forestgreen">@m.StatusName</td>
+
+                                }
+                                else
+                                {
+                                    <td style="font-weight: bold; color: red">@m.StatusName</td>
+
+                                }
+                                <td>@m.Price VNĐ</td>
+                                <td>
+                                    <button class="btn btn-outline-danger btn-sm" onclick="openDeleteModal(@m.TourPrivateId, @m.Status)" style="margin-right: 5px;" data-toggle="modal" data-target="#deleteModal">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">Thêm mới</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <form id="bouqueti-form">
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <div class="form-group">
+                                    <select class="form-control" id="LocationFromId">
+                                        <option value="" selected>Chọn địa điểm bắt đầu</option>
+                                        @foreach (var m in @ViewBag.ListLocation)
+                                        {
+                                            <option value="@m.LocationId">@m.LocationName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <div class="form-group">
+                                    <select class="form-control" id="LocationToId">
+                                        <option value="" selected>Chọn địa điểm kết thúc</option>
+                                        @foreach (var m in @ViewBag.ListLocation)
+                                        {
+                                            <option value="@m.LocationId">@m.LocationName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="required" for="inputEmail4">Số người</label>
+                                <input type="number" class="form-control contact-method" id="Slot" placeholder="Nhập số lượng người đi">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="required" for="inputEmail4">Ngày bắt đầu</label>
+                                <input type="date" class="form-control contact-method" id="StartDate">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="required" for="inputEmail4">Ngày kết thúc</label>
+                                <input type="date" class="form-control contact-method" id="ToDate">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <div class="form-group">
+                                    <select class="form-control" id="HotelId">
+                                        <option value="" selected>Chọn khách sạn</option>
+                                        @foreach (var m in @ViewBag.ListHotel)
+                                        {
+                                            <option value="@m.HotelId">@m.HotelName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <div class="form-group">
+                                    <select class="form-control" id="VehicleId">
+                                        <option value="" selected>Chọn phương tiện di chuyển</option>
+                                        @foreach (var m in @ViewBag.ListVehicle)
+                                        {
+                                            <option value="@m.VehicleId">@m.VahicleName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                <button type="button" class="btn btn-primary" onclick="submit()">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 style="text-align:center">Bạn chắc chắn muốn xóa bản ghi này ?</h2>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                <button type="button" class="btn btn-primary" onclick="deleteItem()">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    openAddModal = () => {
+        $('#LocationFromId').val('');
+        $('#LocationToId').val('');
+        $('#Slot').val('');
+        $('#StartDate').val('');
+        $('#ToDate').val('');
+        $('#HotelId').val('');
+        $('#VehicleId').val('');
+    };
+
+    // Example POST method implementation:
+    async function postData(url = '', data = {}) {
+        // Default options are marked with *
+        const response = await fetch(url, {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, *same-origin, omit
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            body: JSON.stringify(data) // body data type must match "Content-Type" header
+        });
+        return response.json(); // parses JSON response into native JavaScript objects
+    }
+
+    submit = () => {
+        var req = {
+            LocationFromId: $('#LocationFromId').val(),
+            LocationToId: $('#LocationToId').val(),
+            Slot: $('#Slot').val(),
+            StartDate: $('#StartDate').val(),
+            ToDate: $('#ToDate').val(),
+            HotelId: $('#HotelId').val(),
+            VehicleId: $('#VehicleId').val(),
+            AccountId: JSON.parse(localStorage.getItem('UserInfo')).AccountId,
+        }
+
+        postData('/UserPage/BookingPrivateTour', req)
+            .then((data) => {
+                if (data.success) {
+                    toastr.success('Successfully !');
+                    $('.modal').modal('hide');
+                    window.location.reload();
+                }
+                else {
+                    toastr.warning('Failed !');
+                    $('.modal').modal('hide');
+                }
+            });
+    }
+    var id_record = 0;
+    var _status = 0;
+    openDeleteModal = (id, status) => {
+        id_record = id;
+        _status = status;
+    }
+
+    deleteItem = () => {
+        if (_status == 2) {
+            toastr.warning('Tour cá nhân này đã được hệ thống duyệt. Không thể xóa !');
+        }
+        else {
+            $.ajax({
+                url: '/UserPage/DeletePrivateTour?id=' + id_record,
+                type: 'GET',
+                success: function (result) {
+                    if (result.success) {
+                        toastr.success('Successfully !');
+                        $('.modal').modal('hide');
+                        window.location.reload();
+                    }
+                    else {
+                        toastr.warning('Failed !');
+                        $('.modal').modal('hide');
+                    }
+                }
+            });
+        }
+    }
+</script>
+
