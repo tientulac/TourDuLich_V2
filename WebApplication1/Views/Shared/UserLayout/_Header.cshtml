@@ -27,7 +27,7 @@
                             <a class="nav-link" href="/UserPage/ListHotel"> Khách sạn</a>
                         </li>
                         <li class="nav-item row" id="login">
-                            <a class="nav-link" href="/UserPage/PrivateTour"> Đặt tour cá nhân</a>
+                            <a class="nav-link" onclick="seePrivateTour()" href="javascript:void(0)"> Đặt tour cá nhân</a>
                         </li>
                         <li class="nav-item" id="notLogin">
                             <a class="nav-link" href="javascript:void(0)" data-toggle="modal" data-target="#loginModal">Đăng nhập</a>
@@ -120,6 +120,11 @@
         window.location.href = '/UserPage/ListTicket?account_id=' + id_tk;
     }
 
+    seePrivateTour = () => {
+        var id_tk = JSON.parse(localStorage.getItem('UserInfo')).AccountId;
+        window.location.href = '/UserPage/PrivateTour?account_id=' + id_tk;
+    }
+
     getInfo = () => {
         var info = localStorage.getItem("UserInfo");
         if (info) {
@@ -141,7 +146,7 @@
         localStorage.removeItem("UserInfo");
         toastr.success('Successfully !');
         getInfo();
-        window.location.reload();
+        window.location.href = '/UserPage/Index';
     }
 
     async function postData(url = '', data = {}) {

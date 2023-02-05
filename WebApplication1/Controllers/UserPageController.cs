@@ -274,9 +274,9 @@ namespace WebApplication1.Controllers
             }
         }
 
-        public ActionResult PrivateTour()
+        public ActionResult PrivateTour(int account_id)
         {
-            var listPrivateTour = (from a in db.TourPrivates
+            var listPrivateTour = (from a in db.TourPrivates.Where(x => x.AccountId == account_id)
                                    select new TourPrivateDTO
                                    {
                                        TourPrivateId = a.TourPrivateId,
